@@ -1,6 +1,8 @@
 import { FormEvent, ReactNode, SetStateAction, useState } from "react";
-import { signIn, signOut } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import Google from "next-auth/providers/google";
+
+import { FcGoogle } from "react-icons/fc";
 
 interface WrapperProps {
   children: ReactNode;
@@ -17,18 +19,20 @@ const Register: React.FC<ComponentProps> = ({ login = true }) => {
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
 
-  // const handleRegister = (e: FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-  //   signIn("google");
-  //   // compare passwords
-  //   // create a user
-  //   // add user to state
-  // };
-  // const handleLogin = (e: FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-  //   signIn("google");
-  //   // add user to state
-  // };
+  const { data: session } = useSession();
+
+  const handleRegister = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // compare passwords
+    // create a user
+    // add user to state
+  };
+  const handleLogin = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // add user to state
+  };
+
+  const handleGoogleLogin = async () => {};
 
   const renderWelcomeMessage = () => {
     if (isLogin) {
@@ -78,6 +82,18 @@ const Register: React.FC<ComponentProps> = ({ login = true }) => {
     </button>
   );
 
+  const renderLoginWithGoogle = () => (
+    <button
+      className="w-full my-2 text-gray-700 border shadow-sm flex justify-center items-center"
+      onClick={() => handleGoogleLogin()}
+    >
+      <span>
+        <FcGoogle size={"1.3rem"} className="mx-2" />
+      </span>
+      Sign in with Google
+    </button>
+  );
+
   const renderUsernameField = () => (
     <div className="my-2">
       <label>Username</label>
@@ -102,6 +118,7 @@ const Register: React.FC<ComponentProps> = ({ login = true }) => {
           {renderUsernameField()}
           {renderPasswordField()}
           {renderSwitchLogin()}
+          {renderLoginWithGoogle()}
           {renderSubmitButton()}
         </form>
       );
@@ -112,6 +129,7 @@ const Register: React.FC<ComponentProps> = ({ login = true }) => {
         {renderPasswordField()}
         {renderPasswordField("Confirm Password", setConfirmPassword)}
         {renderSwitchLogin()}
+        {renderLoginWithGoogle()}
         {renderSubmitButton("Register")}
       </form>
     );
